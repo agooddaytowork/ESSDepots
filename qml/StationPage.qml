@@ -3,6 +3,7 @@ import QtCharts 2.1
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import QtQuick.VirtualKeyboard 2.1
+import CustomControls 1.0
 
 Item {
     id: stationPage
@@ -42,18 +43,16 @@ Item {
         id: chartView
         anchors.topMargin: 50
         anchors.top: parent.top
-        anchors.bottom: parent.bottom
+
         anchors.left: parent.left
         width: 1350
+        height: 720
         theme: ChartView.ChartThemeDark
         animationOptions:  ChartView.SeriesAnimations
         antialiasing: true
         property  int initialX
         property int  initialY
         property double currentScale
-
-
-
 
         function toMsecsSinceEpoch(date) {
             var msecs = date.getTime();
@@ -164,6 +163,164 @@ Item {
         }
     }
 
+
+    // 3 GAUGES for PRESSURE CURRENT AND VOLTAGE
+
+    Rectangle{
+        id: gaugeArea
+        width: 1330
+        height: 280
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.bottomMargin: 10
+        radius: 10
+        color: "#cee"
+
+        RowLayout{
+            id: gaugeRowLayout
+            anchors.fill: parent
+            anchors.topMargin: 10
+
+            spacing: 20
+
+            //PRESURE GAUGE
+            Rectangle{
+                Layout.alignment: Layout.Center
+                width: 250
+                height: 250
+                color: "#1d1d35"
+                border.color: "#000000"
+                border.width: 3
+                radius: 10
+
+                Text {
+
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+
+                    anchors.leftMargin: 10
+                    anchors.topMargin: 10
+                    font.pointSize: 13
+                    color: "#FAFAFA"
+                    text: qsTr("Pressure")
+                }
+
+                RadialBar{
+                    id: pressureGauge
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    width: parent.width / 1.4
+                    height: width
+                    penStyle: Qt.RoundCap
+                    progressColor: "#00ffc1"
+                    foregroundColor: "#191a2f"
+                    dialWidth: 12
+                    minValue: 10e-12
+                    maxValue: 10e-7
+                    value: 1e-8
+                    suffixText: "Torr"
+                    textFont {
+                        family: "Halvetica"
+                        italic: false
+                        pointSize: 18
+                    }
+                    textColor: "#00ffc1"
+                }
+            }
+
+            //CURRENT GAUGE
+            Rectangle{
+                Layout.alignment: Layout.Center
+                width: 250
+                height: 250
+                color: "#1d1d35"
+                border.color: "#000000"
+                border.width: 3
+                radius: 10
+
+                Text {
+
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+
+                    anchors.leftMargin: 10
+                    anchors.topMargin: 10
+                    font.pointSize: 13
+                    color: "#FAFAFA"
+                    text: qsTr("Current")
+                }
+
+                RadialBar{
+                    id: currentGauge
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    width: parent.width / 1.4
+                    height: width
+                    penStyle: Qt.RoundCap
+                    progressColor: "#00ffc1"
+                    foregroundColor: "#191a2f"
+                    dialWidth: 12
+                    minValue: 10e-12
+                    maxValue: 10e-7
+                    value: 1e-7
+                    suffixText: "Ampe"
+                    textFont {
+                        family: "Halvetica"
+                        italic: false
+                        pointSize: 18
+                    }
+                    textColor: "#00ffc1"
+                }
+            }
+
+            //Voltage Gauge
+            Rectangle{
+                Layout.alignment: Layout.Center
+                width: 250
+                height: 250
+                color: "#1d1d35"
+                border.color: "#000000"
+                border.width: 3
+                radius: 10
+
+                Text {
+
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+
+                    anchors.leftMargin: 10
+                    anchors.topMargin: 10
+                    font.pointSize: 13
+                    color: "#FAFAFA"
+                    text: qsTr("Voltage")
+                }
+
+                RadialBar{
+                    id: voltageGauge
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    width: parent.width / 1.4
+                    height: width
+                    penStyle: Qt.RoundCap
+                    progressColor: "#00ffc1"
+                    foregroundColor: "#191a2f"
+                    dialWidth: 12
+                    minValue: 0
+                    maxValue: 8000
+                    value: 5000
+                    suffixText: "Volt"
+                    textFont {
+                        family: "Halvetica"
+                        italic: false
+                        pointSize: 18
+                    }
+                    textColor: "#00ffc1"
+                }
+            }
+        }
+
+    }
 
     // FRU INFO EDIT PANEL
     Flickable{

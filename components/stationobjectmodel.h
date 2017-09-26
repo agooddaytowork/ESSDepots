@@ -39,7 +39,10 @@ public:
         pumpAddr,
         pumpCh,
         SDCSAddr,
-        SDCSCh
+        SDCSCh,
+        lastCurrent,
+        lastPressure,
+        lastVoltage
 
     };
 

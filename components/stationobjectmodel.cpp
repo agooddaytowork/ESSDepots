@@ -58,7 +58,9 @@ QVariant StationObjectModel::data(const QModelIndex &index, int role) const
     else if (role == pumpCh)    return station.pumpCh();
     else if (role == SDCSAddr) return station.SDCSAddr();
     else if (role == SDCSCh)    return station.SDCSCh();
-
+    else if (role == lastCurrent) return station.lastCurrent();
+    else if (role == lastPressure) return station.lastPressure();
+    else if (role == lastVoltage) return station.lastVoltage();
 
     return QVariant();
 }
@@ -97,6 +99,9 @@ bool StationObjectModel::setData(const QModelIndex &index, const QVariant &value
     else if (role == pumpCh)     station.setPumpCh(value.toInt());
     else if (role == SDCSAddr)  station.setSDCSAddr(value.toInt());
     else if (role == SDCSCh)     station.setSDCSCh(value.toInt());
+    else if(role == lastCurrent) station.setLastCurrent(value.toDouble());
+    else if(role == lastPressure) station.setLastPressure(value.toDouble());
+    else if(role == lastVoltage) station.setLastVoltage(value.toInt());
 
     m_stationObjectMap.insert(station.stationId(), station);
 
@@ -134,21 +139,24 @@ QHash<int, QByteArray> StationObjectModel::roleNames() const
     roles[pumpCh] = "pumpCh";
     roles[SDCSAddr] ="SDCSAddr";
     roles[SDCSCh] = "SDCSCh";
+    roles[lastCurrent] = "lastCurrent";
+    roles[lastPressure] = "lastPressure";
+    roles[lastVoltage] = "lastVoltage";
 
     return roles;
 }
 
 void StationObjectModel::updateStationFruInfo(const int &index, const QByteArray &KTPNValue, const QByteArray &KTSERIALPNValue, const QByteArray &LPNValue, const QByteArray &GUNOFFPRESSUREValue, const QByteArray &POValue, const QString &SUPPLIERTESTDATEValue, const QString &ReceivedDateValue, const QString &ShippedDateValue)
 {
-     QModelIndex anIndex = this ->index(index);
-     setData(anIndex, KTPNValue, KTPN);
-     setData(anIndex, KTSERIALPNValue, KTSERIALPN);
-     setData(anIndex, LPNValue, LPN);
-     setData(anIndex, GUNOFFPRESSUREValue, GUNOFFPRESSURE);
-     setData(anIndex, POValue, PO);
-     setData(anIndex, SUPPLIERTESTDATEValue, SUPPLIERTESTDATE);
-     setData(anIndex, ReceivedDateValue, ReceviedDate);
-     setData(anIndex, ShippedDateValue, ShippedDate);
+    QModelIndex anIndex = this ->index(index);
+    setData(anIndex, KTPNValue, KTPN);
+    setData(anIndex, KTSERIALPNValue, KTSERIALPN);
+    setData(anIndex, LPNValue, LPN);
+    setData(anIndex, GUNOFFPRESSUREValue, GUNOFFPRESSURE);
+    setData(anIndex, POValue, PO);
+    setData(anIndex, SUPPLIERTESTDATEValue, SUPPLIERTESTDATE);
+    setData(anIndex, ReceivedDateValue, ReceviedDate);
+    setData(anIndex, ShippedDateValue, ShippedDate);
 
 }
 

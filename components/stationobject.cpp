@@ -8,12 +8,12 @@ StationObject::StationObject()
 }
 
 StationObject::StationObject(const int &id, const QString &name, const double &top, const double &left, const QByteArray &RFID)
-    :m_id(id), m_stationName(name), m_top(top), m_left(left), m_RFID(RFID)
+    :m_id(id), m_stationName(name), m_top(top), m_left(left), m_RFID(RFID), m_lastCurrent(0), m_lastPressure(0), m_lastVoltage(0)
 {
 }
 
 StationObject::StationObject(const int &id, const QString &name, const double &top, const double &left,const QByteArray &egunType, const QByteArray &RFID, const QByteArray &KTPN, const QByteArray &KTSERIALPN, const QByteArray &LPN, const QByteArray &GUNOFFPRESSURE, const QByteArray &PO, const QString &SUPPLIERTESTDATE, const QString &ReceivedDate, const QString &ShippedDate)
-    :m_id(id), m_stationName(name), m_top(top), m_left(left), m_RFID(RFID), m_KTPN(KTPN), m_KTSERIALPN(KTSERIALPN), m_LPN(LPN), m_GUNOFFPRESSURE(GUNOFFPRESSURE), m_PONumber(PO), m_SUPPLIERTESTDATE(SUPPLIERTESTDATE), m_ReceivedDate(ReceivedDate), m_ShippedDate(ShippedDate), m_egunType(egunType)
+    :m_id(id), m_stationName(name), m_top(top), m_left(left), m_RFID(RFID), m_KTPN(KTPN), m_KTSERIALPN(KTSERIALPN), m_LPN(LPN), m_GUNOFFPRESSURE(GUNOFFPRESSURE), m_PONumber(PO), m_SUPPLIERTESTDATE(SUPPLIERTESTDATE), m_ReceivedDate(ReceivedDate), m_ShippedDate(ShippedDate), m_egunType(egunType), m_lastCurrent(0), m_lastPressure(0), m_lastVoltage(0)
 {
 
 }
@@ -331,6 +331,36 @@ void StationObject::setSDCSCh(const int &ch)
     m_SDCSCh = ch;
 }
 
+
+double StationObject::lastCurrent() const
+{
+    return m_lastCurrent;
+}
+
+double StationObject::lastPressure() const
+{
+    return m_lastPressure;
+}
+
+int StationObject::lastVoltage() const
+{
+    return m_lastVoltage;
+}
+
+void StationObject::setLastCurrent(const double &value)
+{
+    m_lastCurrent = value;
+}
+
+void StationObject::setLastPressure(const double &value)
+{
+    m_lastPressure = value;
+}
+
+void StationObject::setLastVoltage(const int &value)
+{
+    m_lastVoltage = value;
+}
 
 
 

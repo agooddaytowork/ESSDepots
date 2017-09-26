@@ -96,6 +96,14 @@ public:
     int SDCSCh() const;
     void setSDCSCh(const int & ch);
 
+    double lastPressure() const;
+    double lastCurrent() const;
+    int lastVoltage() const;
+
+    void setLastPressure(const double &value);
+    void setLastCurrent (const double &value);
+    void setLastVoltage(const int &value);
+
 private:
     int m_id;
     QString m_stationName;
@@ -122,6 +130,10 @@ private:
     double m_thresholdUpP;
     double m_thresholdDownI;
     double m_thresholdUpI;
+
+    double m_lastPressure;
+    int    m_lastVoltage;
+    double m_lastCurrent;
 
     int m_pumpType;
     int m_pumpAddr;

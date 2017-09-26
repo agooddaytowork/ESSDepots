@@ -129,7 +129,7 @@ Item {
         font.pixelSize: 40
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 6
+        anchors.topMargin: 80
 
     }
 
@@ -198,10 +198,6 @@ Item {
             }
 
         }
-
-
-
-
 
 
     }

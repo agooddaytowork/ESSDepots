@@ -22,7 +22,6 @@ Item {
     Rectangle
     {
         width: 400
-
         anchors.top: parent.top
         anchors.topMargin: 60
         anchors.left: parent.left

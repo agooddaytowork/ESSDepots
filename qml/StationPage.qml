@@ -41,7 +41,7 @@ Item {
 
     ChartView{
         id: chartView
-        anchors.topMargin: 50
+        anchors.topMargin: 70
         anchors.top: parent.top
 
         anchors.left: parent.left

@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>images/button_default.png</file>
+        <file>images/button_pressed.png</file>
+        <file>images/NOTICE.txt</file>
+        <file>images/textinput.png</file>
+        <file>images/toolbar.png</file>
+        <file>qml/ControlPanel.qml</file>
+        <file>qml/StationPage.qml</file>
+        <file>qml/FruManagePage.qml</file>
+        <file>qml/FrusTextField.qml</file>
+        <file>qml/DepotFloor.qml</file>
+        <file>images/background.jpg</file>
+        <file>qml/LogInPage.qml</file>
+        <file>images/Kla-logo-purplepng.png</file>
+        <file>qml/StationSettingsPage.qml</file>
+        <file>images/back.png</file>
+        <file>images/lock.png</file>
+        <file>images/setting.png</file>
+        <file>images/home.png</file>
+        <file>images/menu.png</file>
+        <file>qml/GaugeSettingsPage.qml</file>
+        <file>images/Kla-logo-purplepng.jpg</file>
+        <file>images/Kla-logo-white.png</file>
+        <file>images/wrongPassword.png</file>
+        <file>images/menu2.png</file>
+        <file>images/addStation.png</file>
+        <file>images/removeStation.png</file>
+    </qresource>
+</RCC>

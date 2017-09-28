@@ -24,6 +24,15 @@ Item {
     property bool sProtectON
     property bool sValveON
 
+    Text {
+        id: stationName
+        text: sStationName
+        font.pixelSize: 20
+        font.bold:  true
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
     Rectangle
     {
         width: 200
@@ -73,7 +82,7 @@ Item {
 
                 if(Math.abs(pinch.center.x - chartView.initialX) >= 100)
                 {
-                    LocalDb.updateDataToGraph(pressureSerie, axisX1.min, axisX1.max, sRFID)
+                    LocalDb.updateDataToGraph(pressureSerie,voltageSerie, currentSerie, axisX1.min, axisX1.max, sRFID)
                     chartView.initialX = pinch.center.x
                 }
 
@@ -108,7 +117,7 @@ Item {
 
                     }
 
-                    LocalDb.updateDataToGraph(pressureSerie, axisX1.min, axisX1.max, sRFID)
+                    LocalDb.updateDataToGraph(pressureSerie, voltageSerie, currentSerie, axisX1.min, axisX1.max, sRFID)
 
                 }
                 console.log("pinch scale: " + pinch.scale)
@@ -116,10 +125,20 @@ Item {
 
             onPinchFinished:
             {
-                LocalDb.updateDataToGraph(pressureSerie, axisX1.min, axisX1.max, sRFID)
+                LocalDb.updateDataToGraph(pressureSerie, voltageSerie, currentSerie, axisX1.min, axisX1.max, sRFID)
             }
         }
 
+
+        ValueAxis{
+            id: axisY2
+            min: 0
+            max: 8000
+            tickCount: 6
+             labelFormat: "%d"
+
+
+        }
 
         LogValueAxis{
             id: axisY1
@@ -149,6 +168,30 @@ Item {
             style: Qt.DotLine
         }
 
+        LineSeries{
+            id: voltageSerie
+            name: "Voltage"
+            axisX: axisX1
+            axisYRight: axisY2
+            useOpenGL: true
+            width: 4
+            color: "orange"
+            style: Qt.DotLine
+
+        }
+
+        LineSeries{
+            id: currentSerie
+            name: "Current"
+            axisX: axisX1
+            axisY: axisY1
+            useOpenGL: true
+            width: 4
+            color: "cyan"
+            style: Qt.DotLine
+
+        }
+
         Timer
         {
             id:loadGraphFirstTime
@@ -157,8 +200,7 @@ Item {
             running:true
             onTriggered:
             {
-                LocalDb.initializeDataToGraph(pressureSerie,axisX1, sRFID)
-
+                LocalDb.initializeDataToGraph(pressureSerie,voltageSerie,currentSerie,axisX1, sRFID)
             }
         }
     }

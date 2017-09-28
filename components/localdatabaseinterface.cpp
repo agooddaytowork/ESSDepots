@@ -135,25 +135,25 @@ bool LocalDatabaseInterface::initializeGaugeModel()
 
     if(tmpQuery.exec("SELECT * FROM gauges"))
     {
-         anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeeded: " + tmpQuery.executedQuery()));
-         anIf(LocalDatabaseInterfaceDebuggerEnabled,
-              anAck("Adding gauges to localDatabaseMap"  ));
-         while (tmpQuery.next())
-         {
-             QString tmpTop = tmpQuery.value("top").toString();
-             QString tmpLeft = tmpQuery.value("left_style").toString();
+        anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeeded: " + tmpQuery.executedQuery()));
+        anIf(LocalDatabaseInterfaceDebuggerEnabled,
+             anAck("Adding gauges to localDatabaseMap"  ));
+        while (tmpQuery.next())
+        {
+            QString tmpTop = tmpQuery.value("top").toString();
+            QString tmpLeft = tmpQuery.value("left_style").toString();
 
-             tmpTop = tmpTop.remove((tmpTop.length()-2),2);
-             tmpLeft = tmpLeft.remove((tmpLeft.length()-2),2);
+            tmpTop = tmpTop.remove((tmpTop.length()-2),2);
+            tmpLeft = tmpLeft.remove((tmpLeft.length()-2),2);
 
-             GaugeObject aGauge(tmpQuery.value("id").toInt(), tmpTop.toDouble(), tmpLeft.toDouble(), tmpQuery.value("sdcsAddr").toInt()
-                                ,tmpQuery.value("thresholdDownP").toDouble(), tmpQuery.value("thresholdUpP").toDouble());
-             m_gaugeModel.addGauge(aGauge);
-         }
+            GaugeObject aGauge(tmpQuery.value("id").toInt(), tmpTop.toDouble(), tmpLeft.toDouble(), tmpQuery.value("sdcsAddr").toInt()
+                               ,tmpQuery.value("thresholdDownP").toDouble(), tmpQuery.value("thresholdUpP").toDouble());
+            m_gaugeModel.addGauge(aGauge);
+        }
 
-         anIf(LocalDatabaseInterfaceDebuggerEnabled,
-                      anAck("Finished adding stations to localDatabase Map; returning ..."  ));
-         return true;
+        anIf(LocalDatabaseInterfaceDebuggerEnabled,
+             anAck("Finished adding stations to localDatabase Map; returning ..."  ));
+        return true;
     }
     anIf(LocalDatabaseInterfaceDebuggerEnabled, anError("Query failed: SELECT * FROM gauges"));
 
@@ -171,35 +171,39 @@ void LocalDatabaseInterface::stop()
 
 }
 
-void LocalDatabaseInterface::initializeDataToGraph(QAbstractSeries *series, QAbstractAxis *axis,const QString &mRFID)
+void LocalDatabaseInterface::initializeDataToGraph(QAbstractSeries *pressure, QAbstractSeries *voltage, QAbstractSeries *current, QAbstractAxis *axis,const QString &mRFID)
 {
     QSqlQuery tmpQuery;
 
     if(tmpQuery.exec("SELECT * FROM (SELECT * FROM "+ mRFID +" ORDER BY Time DESC LIMIT 180) T1 ORDER BY Time ASC"))
     {
         anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query Succeeded: SELECT * FROM (SELECT * FROM "+ mRFID +" ORDER BY Time DESC LIMIT 500) T1 ORDER BY Time ASC"));
-        if(series)
+        if(pressure && voltage && current)
         {
             if(axis)
             {
                 anIf(LocalDatabaseInterfaceDebuggerEnabled,anAck("series exists"));
-                QLineSeries *lineSeries = static_cast<QLineSeries *>(series);
+                QLineSeries *pressurelineSeries = static_cast<QLineSeries *>(pressure);
+                QLineSeries *voltagelineSeries = static_cast<QLineSeries*>(voltage);
+                QLineSeries *currentLineSeries = static_cast<QLineSeries*>(current);
+
                 QDateTimeAxis *xAxis = static_cast<QDateTimeAxis *>(axis);
 
-                lineSeries->clear();
+                pressurelineSeries->clear();
+                voltagelineSeries->clear();
+                currentLineSeries->clear();
 
                 if(tmpQuery.first())
                 {
                     xAxis->setMin(tmpQuery.value("Time").toDateTime());
-
                 }
-
                 QDateTime maxTime;
                 anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Enter loop to extract data"));
                 while(tmpQuery.next())
                 {
-                    lineSeries->append(tmpQuery.value("Time").toDateTime().toMSecsSinceEpoch(), tmpQuery.value("Pressure").toDouble());
-
+                    pressurelineSeries->append(tmpQuery.value("Time").toDateTime().toMSecsSinceEpoch(), tmpQuery.value("Pressure").toDouble());
+                    voltagelineSeries->append(tmpQuery.value("Time").toDateTime().toMSecsSinceEpoch(), tmpQuery.value("Voltage").toInt());
+                    currentLineSeries->append(tmpQuery.value("Time").toDateTime().toMSecsSinceEpoch(), tmpQuery.value("Current").toDouble());
                     maxTime = tmpQuery.value("Time").toDateTime();
                 }
                 anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Finished extracting data"));
@@ -215,29 +219,37 @@ void LocalDatabaseInterface::initializeDataToGraph(QAbstractSeries *series, QAbs
     return;
 }
 
-void LocalDatabaseInterface::updateDataToGraph(QAbstractSeries *series, const QDateTime &firstTimePoint, const QDateTime &lastTimePoint, const QByteArray &RFID)
+void LocalDatabaseInterface::updateDataToGraph(QAbstractSeries *pressure, QAbstractSeries *voltage, QAbstractSeries *current, const QDateTime &firstTimePoint, const QDateTime &lastTimePoint, const QByteArray &RFID)
 {
-    if(series)
+    if(pressure && voltage && current)
     {
-        QLineSeries *lineSeries = static_cast<QLineSeries*> (series);
+        QLineSeries *pressurelineSeries = static_cast<QLineSeries *>(pressure);
+        QLineSeries *voltagelineSeries = static_cast<QLineSeries*>(voltage);
+        QLineSeries *currentLineSeries = static_cast<QLineSeries*>(current);
         QSqlQuery tmpQuery;
         QString tmpQueryString;
 
         tmpQueryString +="SELECT * FROM " + RFID + " WHERE Time BETWEEN '" + firstTimePoint.toString("yyyy-MM-ddThh:mm:ss") + "' and '" + lastTimePoint.toString("yyyy-MM-ddThh:mm:ss") +"'";
 
-        lineSeries->clear();
+        pressurelineSeries->clear();
+        voltagelineSeries->clear();
+        currentLineSeries->clear();
+
         if(tmpQuery.exec(tmpQueryString))
         {
 
             anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeed: " << tmpQuery.executedQuery()));
             while(tmpQuery.next())
             {
-                lineSeries->append(tmpQuery.value("Time").toDateTime().toMSecsSinceEpoch(), tmpQuery.value("Pressure").toDouble());
+                pressurelineSeries->append(tmpQuery.value("Time").toDateTime().toMSecsSinceEpoch(), tmpQuery.value("Pressure").toDouble());
+                voltagelineSeries->append(tmpQuery.value("Time").toDateTime().toMSecsSinceEpoch(), tmpQuery.value("Voltage").toInt());
+                currentLineSeries->append(tmpQuery.value("Time").toDateTime().toMSecsSinceEpoch(), tmpQuery.value("Current").toDouble());
+
             }
         }
         else
         {
-             anIf(LocalDatabaseInterfaceDebuggerEnabled, anError("Query failed: " << tmpQueryString));
+            anIf(LocalDatabaseInterfaceDebuggerEnabled, anError("Query failed: " << tmpQueryString));
         }
     }
 }
@@ -285,16 +297,16 @@ void LocalDatabaseInterface::updateStationSettingToDatabaseSlot(const int &id)
 
     tmpQueryString+= "UPDATE stations SET "
                      "stationName = ?"
-                       ",pumpType = " + QString::number(tmpStation.pumpType())
-                      + ",pumpAddr = " + QString::number(tmpStation.pumpAddr())
-                      + ",pumpCH = " + QString::number(tmpStation.pumpCh())
-                      + ",sdcsAddr =" + QString::number(tmpStation.SDCSAddr())
-                      + ",sdcsCH = " + QString::number(tmpStation.SDCSCh())
-                      + ",thresholdDownP = " + QString::number(tmpStation.thresholdDownP())
-                      + ",thresholdUpP = " +QString::number(tmpStation.thresholdUpP())
-                      + ",thresholdDownI = " + QString::number(tmpStation.thresholdDownI())
-                      + ",thresholdUpI = "  + QString::number(tmpStation.thresholdUpI())
-                      + " WHERE id = " + QString::number(id);
+                     ",pumpType = " + QString::number(tmpStation.pumpType())
+            + ",pumpAddr = " + QString::number(tmpStation.pumpAddr())
+            + ",pumpCH = " + QString::number(tmpStation.pumpCh())
+            + ",sdcsAddr =" + QString::number(tmpStation.SDCSAddr())
+            + ",sdcsCH = " + QString::number(tmpStation.SDCSCh())
+            + ",thresholdDownP = " + QString::number(tmpStation.thresholdDownP())
+            + ",thresholdUpP = " +QString::number(tmpStation.thresholdUpP())
+            + ",thresholdDownI = " + QString::number(tmpStation.thresholdDownI())
+            + ",thresholdUpI = "  + QString::number(tmpStation.thresholdUpI())
+            + " WHERE id = " + QString::number(id);
 
     tmpQuery.prepare(tmpQueryString);
     tmpQuery.addBindValue(tmpStation.stationName());
@@ -316,18 +328,18 @@ void LocalDatabaseInterface::updateStationPositions(const int &id, const double 
 
     QSqlQuery tmpQuery;
 
-        tmpStation.setTop(top);
-        tmpStation.setLeft(left);
+    tmpStation.setTop(top);
+    tmpStation.setLeft(left);
 
-        tmpQuery.prepare("UPDATE stations SET top = ?, left_style = ? WHERE id = ?");
-        tmpQuery.addBindValue(tmpStation.top());
-        tmpQuery.addBindValue(tmpStation.left());
-        tmpQuery.addBindValue(id);
+    tmpQuery.prepare("UPDATE stations SET top = ?, left_style = ? WHERE id = ?");
+    tmpQuery.addBindValue(tmpStation.top());
+    tmpQuery.addBindValue(tmpStation.left());
+    tmpQuery.addBindValue(id);
 
 
     if(tmpQuery.exec())
     {
-         anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeed: " << "UPDATE stations SET top = ?, left_style = ? WHERE id = ?"));
+        anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeed: " << "UPDATE stations SET top = ?, left_style = ? WHERE id = ?"));
     }
     else
     {
@@ -338,37 +350,37 @@ void LocalDatabaseInterface::updateStationPositions(const int &id, const double 
 
 void LocalDatabaseInterface::updateGaugePositions(const int &gid,  const double &left, const double &top)
 {
-   GaugeObject tmpGauge(m_gaugeModel.getGauge(gid));
+    GaugeObject tmpGauge(m_gaugeModel.getGauge(gid));
 
-   QSqlQuery tmpQuery;
+    QSqlQuery tmpQuery;
 
-   tmpGauge.setTop(top);
-   tmpGauge.setLeft(left);
+    tmpGauge.setTop(top);
+    tmpGauge.setLeft(left);
 
-       tmpQuery.prepare("UPDATE gauges SET top = ?, left_style = ? WHERE id = ?");
-       tmpQuery.addBindValue(tmpGauge.top());
-       tmpQuery.addBindValue(tmpGauge.left());
-       tmpQuery.addBindValue(gid);
+    tmpQuery.prepare("UPDATE gauges SET top = ?, left_style = ? WHERE id = ?");
+    tmpQuery.addBindValue(tmpGauge.top());
+    tmpQuery.addBindValue(tmpGauge.left());
+    tmpQuery.addBindValue(gid);
 
 
-   if(tmpQuery.exec())
-   {
+    if(tmpQuery.exec())
+    {
         anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeed: " << tmpQuery.executedQuery()));
-   }
-   else
-   {
-       anIf(LocalDatabaseInterfaceDebuggerEnabled, anError("Querry failed: " << "UPDATE gauges SET top = ?, left_style = ? WHERE id = ?"));
-   }
+    }
+    else
+    {
+        anIf(LocalDatabaseInterfaceDebuggerEnabled, anError("Querry failed: " << "UPDATE gauges SET top = ?, left_style = ? WHERE id = ?"));
+    }
 }
 
 
 QByteArray LocalDatabaseInterface::checkStationState(const StationObject &station)
 {
-        if(station.RFID() == "r0000")
-        {
-            return "EgunNotFound";
-        }
+    if(station.RFID() == "r0000")
+    {
+        return "EgunNotFound";
+    }
 
-        return "EgunGood";
+    return "EgunGood";
 
 }

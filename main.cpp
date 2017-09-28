@@ -34,9 +34,9 @@ int main(int argc, char *argv[])
     aModel.addStation(StationObject(9,"S5",300,100,"FA1212321"));
     aModel.addStation(StationObject(10,"S6",200,100,"FA1212321"));
     QQmlContext *thisContext = engine.rootContext();
-    thisContext->setContextProperty("myStationModel", &localDBInterface.m_stationModel);
+    //thisContext->setContextProperty("myStationModel", &localDBInterface.m_stationModel);
     thisContext->setContextProperty("myGaugeModel", &localDBInterface.m_gaugeModel);
-    //thisContext->setContextProperty("myStationModel", &aModel);
+    thisContext->setContextProperty("myStationModel", &aModel);
     thisContext->setContextProperty("LocalDb", &localDBInterface);
 
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

@@ -24,6 +24,7 @@ Item {
     property bool sProtectON
     property bool sValveON
 
+
     Text {
         id: stationName
         text: sStationName
@@ -74,9 +75,20 @@ Item {
             onPinchStarted: {
                 chartView.currentScale = pinch.scale
                 chartView.initialX = pinch.center.x
+                valueIndicatorLine.visible = true
             }
 
             onPinchUpdated: {
+
+                // update gauges value to match the valueIndicatorLine
+
+                pressureGauge.value =  pressureSerie.at(parseInt(pressureSerie.count/2)).y
+                currentGauge.value  = currentSerie.at(parseInt(currentSerie.count/2)).y
+                voltageGauge.value  = voltageSerie.at(parseInt(voltageSerie.count/2)).y
+                // console.log("Pressure: " + pressureGauge.value)
+                // console.log("Voltage: " + voltageGauge.value)
+                // console.log("Current: " + currentGauge.value)
+                // console.log("------------------------------------------")
                 chartView.scrollLeft(pinch.center.x - pinch.previousCenter.x)
                 chartView.scrollUp(pinch.center.y - pinch.previousCenter.y)
 
@@ -120,22 +132,40 @@ Item {
                     LocalDb.updateDataToGraph(pressureSerie, voltageSerie, currentSerie, axisX1.min, axisX1.max, sRFID)
 
                 }
-                console.log("pinch scale: " + pinch.scale)
+                // console.log("pinch scale: " + pinch.scale)
             }
 
             onPinchFinished:
             {
                 LocalDb.updateDataToGraph(pressureSerie, voltageSerie, currentSerie, axisX1.min, axisX1.max, sRFID)
+                valueIndicatorLine.visible = false
+
+                pressureGauge.value =  pressureSerie.at(pressureSerie.count - 1).y
+                currentGauge.value  = currentSerie.at(currentSerie.count - 1).y
+                voltageGauge.value  = voltageSerie.at(voltageSerie.count - 1).y
             }
         }
 
+
+        Rectangle
+        {
+            id: valueIndicatorLine
+            width: 3
+            height: 580
+            color: "red"
+            visible: false
+            x:parent.width/2
+            y:80
+            z:3
+
+        }
 
         ValueAxis{
             id: axisY2
             min: 0
             max: 8000
             tickCount: 6
-             labelFormat: "%d"
+            labelFormat: "%d"
 
 
         }
@@ -191,7 +221,7 @@ Item {
             style: Qt.DotLine
 
         }
-
+        // Timer to load graph the first time, only run one time
         Timer
         {
             id:loadGraphFirstTime
@@ -201,6 +231,9 @@ Item {
             onTriggered:
             {
                 LocalDb.initializeDataToGraph(pressureSerie,voltageSerie,currentSerie,axisX1, sRFID)
+                pressureGauge.value =  pressureSerie.at(pressureSerie.count - 1).y
+                currentGauge.value  = currentSerie.at(currentSerie.count - 1).y
+                voltageGauge.value  = voltageSerie.at(voltageSerie.count - 1).y
             }
         }
     }
@@ -260,7 +293,7 @@ Item {
                     dialWidth: 12
                     minValue: 10e-12
                     maxValue: 10e-7
-                    value: 1e-8
+                    value: 0
                     suffixText: "Torr"
                     textFont {
                         family: "Halvetica"
@@ -268,6 +301,11 @@ Item {
                         pointSize: 18
                     }
                     textColor: "#00ffc1"
+
+                    onValueChanged:
+                    {
+                        pressureGauge.update()
+                    }
                 }
             }
 
@@ -303,9 +341,9 @@ Item {
                     progressColor: "#00ffc1"
                     foregroundColor: "#191a2f"
                     dialWidth: 12
-                    minValue: 10e-12
-                    maxValue: 10e-7
-                    value: 1e-7
+                    minValue: 10e-9
+                    maxValue: 10e-5
+                    value: 0
                     suffixText: "Ampe"
                     textFont {
                         family: "Halvetica"
@@ -313,6 +351,10 @@ Item {
                         pointSize: 18
                     }
                     textColor: "#00ffc1"
+                    onValueChanged:
+                    {
+                        currentGauge.update()
+                    }
                 }
             }
 
@@ -350,7 +392,7 @@ Item {
                     dialWidth: 12
                     minValue: 0
                     maxValue: 8000
-                    value: 5000
+                    value: 0
                     suffixText: "Volt"
                     textFont {
                         family: "Halvetica"
@@ -358,6 +400,9 @@ Item {
                         pointSize: 18
                     }
                     textColor: "#00ffc1"
+                    onValueChanged: {
+                        voltageGauge.update()
+                    }
                 }
             }
         }

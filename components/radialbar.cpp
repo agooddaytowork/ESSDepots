@@ -109,7 +109,20 @@ void RadialBar::paint(QPainter *painter)
     painter->setPen(pen);
     if(m_ShowText)
     {
-        painter->drawText(rect.adjusted(offset, offset, -offset, -offset), Qt::AlignCenter,QString::number(m_Value) + m_SuffixText);
+        QString value;
+        if(m_Value < 800 && m_Value > 1 )
+        {
+            value = QString::number(m_Value,'f',2);
+        }
+        else if(m_Value >=800)
+        {
+            value = QString::number(m_Value,'f',0);
+        }
+        else
+        {
+            value = QString::number(m_Value, 'e',1);
+        }
+        painter->drawText(rect.adjusted(offset, offset, -offset, -offset), Qt::AlignCenter, value + m_SuffixText);
     }
     else
     {

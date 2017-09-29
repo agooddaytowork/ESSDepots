@@ -4,7 +4,7 @@
 #include <QtCharts/QDateTimeAxis>
 
 QT_CHARTS_USE_NAMESPACE
-#define LocalDatabaseInterfaceDebuggerEnabled 1
+#define LocalDatabaseInterfaceDebuggerEnabled 0
 
 
 LocalDatabaseInterface::LocalDatabaseInterface(const QString &dbUsername, const QString &dbPassword, const QString &dbName, QObject *parent):

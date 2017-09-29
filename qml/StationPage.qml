@@ -334,8 +334,8 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 10
         anchors.bottomMargin: 10
-        radius: 10
-        color: "#cee"
+        radius: 5
+        color: "#c8c8c8"
 
         RowLayout{
             id: gaugeRowLayout
@@ -358,7 +358,6 @@ Item {
 
                     anchors.left: parent.left
                     anchors.top: parent.top
-
                     anchors.leftMargin: 10
                     anchors.topMargin: 10
                     font.pointSize: 13
@@ -373,7 +372,7 @@ Item {
                     width: parent.width / 1.4
                     height: width
                     penStyle: Qt.RoundCap
-                    progressColor: "#00ffc1"
+                    progressColor: "red"
                     foregroundColor: "#191a2f"
                     dialWidth: 12
                     minValue: 10e-12
@@ -385,7 +384,7 @@ Item {
                         italic: false
                         pointSize: 18
                     }
-                    textColor: "#00ffc1"
+                    textColor: "red"
 
                     onValueChanged:
                     {
@@ -472,7 +471,7 @@ Item {
                     width: parent.width / 1.4
                     height: width
                     penStyle: Qt.RoundCap
-                    progressColor: "#00ffc1"
+                    progressColor: "orange"
                     foregroundColor: "#191a2f"
                     dialWidth: 12
                     minValue: 0
@@ -484,7 +483,7 @@ Item {
                         italic: false
                         pointSize: 18
                     }
-                    textColor: "#00ffc1"
+                    textColor: "orange"
                     onValueChanged: {
                         voltageGauge.update()
                     }

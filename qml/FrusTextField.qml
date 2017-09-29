@@ -31,7 +31,7 @@ RowLayout
                 Layout.fillWidth: true
                 Layout.rightMargin: 30
                 height: 40
-
+                opacity: enabled? 1 : 1
                 background: Rectangle{
                     radius: 10
 

@@ -24,6 +24,91 @@ Item {
     property bool sProtectON
     property bool sValveON
 
+    // MENU
+
+
+    // MENU BUTTON
+    Rectangle
+    {
+        id: menu2Button
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 5
+        anchors.rightMargin: 20
+        width: 50
+        height: 50
+        color: menu2Mouse.pressed? "#222" : "transparent"
+        Image {
+            id: menu2Icon
+            source: "../images/menu2.png"
+        }
+
+        MouseArea{
+            id: menu2Mouse
+            anchors.fill: parent
+            onClicked:
+            {
+                menu2Menu.open()
+            }
+        }
+
+        Menu{
+            id: menu2Menu
+            y:menu2Button.height + 10
+
+
+            MenuItem
+            {
+                id: editModeMenuItem
+                text: "Edit FRU info"
+                contentItem: Text{
+                    text: parent.text
+                    font.pixelSize: 20
+                }
+                onClicked: {
+                    stationPage.fruEditEnable = true
+                    operatingModeMenuItem.visible = true
+                    editModeMenuItem.visible = false
+                    editModeMenuItem.height = 0
+                    operatingModeMenuItem.height = 30
+                }
+            }
+
+            MenuItem{
+                id: operatingModeMenuItem
+                text: "Operating Mode"
+                visible: false
+                height: 0
+                contentItem: Text{
+                    text: parent.text
+                    font.pixelSize: 20
+                }
+                onClicked: {
+                    stationPage.fruEditEnable = false
+                    operatingModeMenuItem.visible = false
+                    editModeMenuItem.visible = true
+                    editModeMenuItem.height = 30
+                    operatingModeMenuItem.height = 0
+                }
+            }
+
+            MenuItem
+            {
+                text: "Lock"
+
+                onClicked:
+                {
+                    mainStackView.push(Qt.resolvedUrl("LogInPage.qml"))
+                }
+                contentItem: Text{
+                    text: parent.text
+                    font.pixelSize: 20
+                }
+            }
+
+        }
+
+    }
 
     Text {
         id: stationName
@@ -421,7 +506,6 @@ Item {
         visible: true
         flickableDirection: Flickable.VerticalFlick
 
-
         Rectangle{
             anchors.fill: parent
             color: "transparent"
@@ -455,6 +539,7 @@ Item {
                         var posWithinFlickable = mapToItem(column, 0, height / 2);
                         flickable.contentY = posWithinFlickable.y - flickable.height / 2;
                     }
+
                 }
 
             }
@@ -472,7 +557,6 @@ Item {
                         var posWithinFlickable = mapToItem(column, 0, height / 2);
                         flickable.contentY = posWithinFlickable.y - flickable.height / 2;
                     }
-
                 }
             }
             FrusTextField{
@@ -594,13 +678,14 @@ Item {
                 text: "Update"
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: fruEditEnable
-                background: Rectangle{
-                    radius: 10
-                    implicitWidth: 300
-                    implicitHeight: 50
-                    border.color: "#333"
-                    border.width: 1
-                }
+                Layout.fillWidth:  true
+//                background: Rectangle{
+//                    radius: 10
+//                    implicitWidth: 300
+//                    implicitHeight: 50
+//                    border.color: "#333"
+//                    border.width: 1
+//                }
 
                 onClicked: {
 
@@ -608,14 +693,9 @@ Item {
                 }
             }
 
-            GridLayout{
+            RowLayout{
                 visible: !fruEditEnable
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                columns: 2
-                columnSpacing: 10
-                rowSpacing: 10
-
+                Layout.fillWidth:  true
                 Switch{
                     Layout.alignment: Qt.AlignLeft
                     id: hvONswitch
@@ -637,15 +717,17 @@ Item {
                     text: "Valve OPEN"
 
                 }
-
-                Button
-                {
-                    id: shipButton
-                    Layout.alignment: Qt.AlignLeft
-                    text: "Ship"
-                    Layout.fillWidth: true
-                }
             }
+
+            Button
+            {
+                id: shipButton
+                visible: !fruEditEnable
+                Layout.alignment: Qt.AlignLeft
+                text: "Ship"
+                Layout.fillWidth: true
+            }
+
         }
     }
 
@@ -657,8 +739,9 @@ Item {
         width: parent.width
         height: parent.height * 0.4
         anchors.bottom: parent.bottom
-        color: "transparent"
-        visible: false
+        color: "black"
+        visible:false
+
     }
 
     InputPanel {
@@ -667,6 +750,8 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         scale: 0.7
-
+        onYChanged: {
+            keyboardRect.visible = Qt.inputMethod.visible
+        }
     }
 }

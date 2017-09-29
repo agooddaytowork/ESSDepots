@@ -418,8 +418,9 @@ Item {
         anchors.bottomMargin: keyboardRect.visible ? keyboardRect.height : 100
         anchors.leftMargin: 1400
         anchors.rightMargin: 50
-        visible: !fruEditEnable
+        visible: true
         flickableDirection: Flickable.VerticalFlick
+
 
         Rectangle{
             anchors.fill: parent
@@ -432,7 +433,6 @@ Item {
             width: parent.width
             height: parent.height
             spacing: 10
-
             Label{
                 width: parent.width
                 wrapMode: Label.Wrap
@@ -607,8 +607,49 @@ Item {
                     LocalDb.updateStationFruInfo(sGlobalId, ktpn.myText, ktserialpn.myText, lpn.myText, mfgPressureoff.myText, purchaseOrder.myText, supplierTestDate.myText, dateReceive.myText, dateShipped.myText)
                 }
             }
+
+            GridLayout{
+                visible: !fruEditEnable
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                columns: 2
+                columnSpacing: 10
+                rowSpacing: 10
+
+                Switch{
+                    Layout.alignment: Qt.AlignLeft
+                    id: hvONswitch
+                    text: "HV ON"
+                    Layout.fillWidth: true
+
+                }
+                Switch{
+                    id: protectONswitch
+                    Layout.alignment: Qt.AlignLeft
+                    text: "Protect ON"
+                    Layout.fillWidth: true
+
+                }
+
+                Switch{
+                    id: valveONswitch
+                    Layout.alignment: Qt.AlignLeft
+                    text: "Valve OPEN"
+
+                }
+
+                Button
+                {
+                    id: shipButton
+                    Layout.alignment: Qt.AlignLeft
+                    text: "Ship"
+                    Layout.fillWidth: true
+                }
+            }
         }
     }
+
+
 
     // KEYBOARD SECTIONS
     Rectangle {

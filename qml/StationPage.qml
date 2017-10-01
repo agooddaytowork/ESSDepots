@@ -110,15 +110,6 @@ Item {
 
     }
 
-    Text {
-        id: stationName
-        text: sStationName
-        font.pixelSize: 20
-        font.bold:  true
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
     Rectangle
     {
         width: 200
@@ -516,11 +507,21 @@ Item {
             width: parent.width
             height: parent.height
             spacing: 10
+
+            Label{
+                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Station: " + sStationName
+                font.pixelSize: 30
+                font.bold: true
+
+            }
+
             Label{
                 width: parent.width
                 wrapMode: Label.Wrap
-                verticalAlignment: Qt.AlignVCenter
                 text:"E-source Information"
+                font.bold: true
                 font.pixelSize: 30
             }
 

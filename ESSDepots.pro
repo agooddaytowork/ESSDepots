@@ -7,7 +7,7 @@ static
 {
 QTPLUGIN += qtvirtualkeyboardplugin
 }
-CONFIG += c++11
+CONFIG += -std=c++11
 
 SOURCES += main.cpp \
     components/localdatabaseinterface.cpp \

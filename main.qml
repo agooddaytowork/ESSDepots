@@ -21,6 +21,29 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
+        Text {
+            id: textClock
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            anchors.top: parent.top
+            font.bold: true
+            font.pixelSize: 20
+            color: "#192072"
+        }
+        Timer
+        {
+
+            id: clockTimer
+            interval: 30000
+            repeat: true
+            triggeredOnStart: true
+            running: true
+            onTriggered: {
+                textClock.text = new Date().toDateString() +" - " + new Date().toLocaleTimeString("H:mm")
+            }
+
+        }
+
         RowLayout
         {
             anchors.fill: parent
@@ -146,8 +169,12 @@ ApplicationWindow {
             }
 
             model: ListModel {
+                ListElement { title:"EDCTU Setting" ; source: "qrc:/qml/EDCTUSettingPage.qml"}
                 ListElement { title: "Stations Settings"; source: "qrc:/qml/StationSettingsPage.qml" }
                 ListElement { title: "Gauge Settings"; source: "qrc:/qml/GaugeSettingsPage.qml" }
+                ListElement { title: "Flipper Settings"; source:"qrc/qml/FlipperSettingPage.qml"}
+                ListElement { title: "CCTVs Settings"; source:"qrc/qml/CCTVSettingPage.qml"}
+
             }
 
             ScrollIndicator.vertical: ScrollIndicator { }

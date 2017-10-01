@@ -423,7 +423,7 @@ Item {
                         }
                         PropertyChanges {
                             target: individualStation
-                            disableClick: true
+                            disableClick: false
                         }
 
                     },

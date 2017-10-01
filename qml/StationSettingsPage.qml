@@ -19,6 +19,8 @@ Item {
     //    property int sSDCSAddr
     //    property int sSDCSCh
 
+
+    // STATION LIST ON THE LEFT
     Rectangle
     {
         width: 400
@@ -88,6 +90,8 @@ Item {
 
         }
     }
+
+// STATION INPUT PANEL ON THE RIGHT
     Rectangle
     {
         width: 1520
@@ -102,7 +106,8 @@ Item {
         {
             id: stationSettingsFlickable
             anchors.fill: parent
-            anchors.leftMargin: 20
+            anchors.leftMargin: 50
+            anchors.rightMargin: 250
             flickableDirection:  Flickable.VerticalFlick
             clip: true
 
@@ -364,7 +369,7 @@ Item {
                     id: updateButton
                     text: "Update"
                     font.pixelSize: 20
-
+                    anchors.horizontalCenter: parent.horizontalCenter
                     background: Rectangle{
                         implicitHeight: 100
                         implicitWidth: 400
@@ -384,13 +389,9 @@ Item {
                                                       , pumpTypeComboBox.currentIndex, pumpAddressSpinBox.value, pumpChannelSpinBox.value
                                                       , sDCSAddressSpinBox.value, sDCSChannelSpinBox.value)
                         //console.log("out of update")
-                        stationList.model = myStationModel
+//                        stationList.model = myStationModel
                     }
                 }
-
-
-
-
 
             }
         }

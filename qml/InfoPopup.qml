@@ -25,12 +25,41 @@ Item {
             radius: 10
         }
 
+        ListView {
+            id: popupListView
+            anchors.fill: parent
+            currentIndex: -1
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            anchors.topMargin: 20
+            anchors.bottomMargin: 20
+            model: messageModel
+            clip: true
+
+            delegate: SwipeDelegate{
+
+                text: theMessage
+
+            }
+
+        }
+
         closePolicy: Popup.CloseOnPressOutside
+        onAboutToHide: {
+            messageModel.clear()
+        }
+
+    }
+
+    ListModel{
+        id: messageModel
+
     }
 
     Connections{
         target: LocalDb
         onMessageToUser:{
+
             if(type === LocalDb.Info)
             {
                 infoPopup.state = "Info"
@@ -47,7 +76,11 @@ Item {
             {
                 infoPopup.state = "Confimation"
             }
+            messageModel.append({theMessage: message})
+            aPopUP.open()
         }
     }
+
+
 
 }

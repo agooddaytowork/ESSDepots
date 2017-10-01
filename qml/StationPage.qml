@@ -272,6 +272,7 @@ Item {
             width: 4
             color: "red"
             style: Qt.DotLine
+
         }
 
         LineSeries{

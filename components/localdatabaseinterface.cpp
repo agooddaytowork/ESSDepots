@@ -340,11 +340,13 @@ void LocalDatabaseInterface::updateStationPositions(const int &id, const double 
     if(tmpQuery.exec())
     {
         anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeed: " << "UPDATE stations SET top = ?, left_style = ? WHERE id = ?"));
+        emit messageToUser(PopUpTypes::Confirmation, "Station "+ tmpStation.stationName() + " 's position updated");
     }
     else
     {
         anIf(LocalDatabaseInterfaceDebuggerEnabled, anError("Querry failed: " << "UPDATE stations SET top = ?, left_style = ? WHERE id = ?"));
     }
+
 
 }
 
@@ -366,11 +368,13 @@ void LocalDatabaseInterface::updateGaugePositions(const int &gid,  const double 
     if(tmpQuery.exec())
     {
         anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeed: " << tmpQuery.executedQuery()));
+        emit messageToUser(PopUpTypes::Confirmation, "Gauge, ID: "+ QString::number(tmpGauge.id()) + ", position updated");
     }
     else
     {
         anIf(LocalDatabaseInterfaceDebuggerEnabled, anError("Querry failed: " << "UPDATE gauges SET top = ?, left_style = ? WHERE id = ?"));
     }
+
 
 }
 

@@ -24,6 +24,15 @@ public:
     StationObjectModel m_stationModel;
     GaugeObjectModel m_gaugeModel;
 
+    enum PopUpTypes{
+        Info,
+        Alert,
+        Warning,
+        Confirmation
+    };
+
+    Q_ENUM(PopUpTypes)
+
 public slots:
     Q_INVOKABLE void initializeDataToGraph(QAbstractSeries *pressure, QAbstractSeries *voltage, QAbstractSeries *current, QAbstractAxis *axis,const QString &mRFID);
     Q_INVOKABLE void updateDataToGraph(QAbstractSeries *pressure, QAbstractSeries *voltage, QAbstractSeries *current, const QDateTime &firstTimePoint, const QDateTime &lastTimePoint, const QByteArray &RFID);
@@ -49,11 +58,11 @@ public slots:
 
 signals:
     void updateStationSettingToDatabaseSignal(const int &id);
+    void messageToUser(const PopUpTypes &type, const QString &message);
 private:
     QString m_dbUsername;
     QString m_dbPassword;
     QString m_dbName;
-
     QSqlDatabase localDb;
 
 

@@ -568,7 +568,7 @@ Item {
                                             {
                                                 //snap inter bottom
                                                 myDragcell.y = stationMap.itemAt(i).y + myDragcell.height
-                                                console.log("collision with the outer box bottom")
+                                                //console.log("collision with the outer box bottom")
 
                                                 if(Math.abs(myDragcell.x - stationMap.itemAt(i).x) <= 10)
                                                 {
@@ -580,7 +580,7 @@ Item {
                                             {
                                                 // snap inter left
                                                 myDragcell.x = stationMap.itemAt(i).x - myDragcell.width
-                                                console.log("collision with the outer box left")
+                                                //console.log("collision with the outer box left")
                                                 if(Math.abs(myDragcell.y - stationMap.itemAt(i).y) <= 10)
                                                 {
                                                     myDragcell.y = stationMap.itemAt(i).y
@@ -593,7 +593,7 @@ Item {
                                             {
                                                 // snap inter right
                                                 myDragcell.x = stationMap.itemAt(i).x + myDragcell.width
-                                                console.log("collision with the outer box right")
+                                                //console.log("collision with the outer box right")
                                                 if(Math.abs(myDragcell.y - stationMap.itemAt(i).y) <= 10)
                                                 {
                                                     myDragcell.y = stationMap.itemAt(i).y
@@ -603,7 +603,7 @@ Item {
                                             {
                                                 // snap inter top
                                                 myDragcell.y = stationMap.itemAt(i).y - myDragcell.height
-                                                console.log("collision with the outer box top")
+                                                //console.log("collision with the outer box top")
 
                                                 if(Math.abs(myDragcell.x - stationMap.itemAt(i).x) <= 10)
                                                 {
@@ -767,7 +767,7 @@ Item {
                                         {
                                             //snap inter bottom
                                             myGaugeDragCell.y = gaugeMap.itemAt(i).y + myGaugeDragCell.height
-                                            console.log("collision with the outer box bottom")
+                                            //console.log("collision with the outer box bottom")
 
                                             if(Math.abs(myGaugeDragCell.x - gaugeMap.itemAt(i).x) <= 10)
                                             {
@@ -780,7 +780,7 @@ Item {
                                         {
                                             // snap inter left
                                             myGaugeDragCell.x = gaugeMap.itemAt(i).x - myGaugeDragCell.width
-                                            console.log("collision with the outer box left")
+                                            //console.log("collision with the outer box left")
                                             if(Math.abs(myGaugeDragCell.y - gaugeMap.itemAt(i).y) <= 10)
                                             {
                                                 myGaugeDragCell.y = gaugeMap.itemAt(i).y
@@ -793,7 +793,7 @@ Item {
                                         {
                                             // snap inter right
                                             myGaugeDragCell.x = gaugeMap.itemAt(i).x + myGaugeDragCell.width
-                                            console.log("collision with the outer box right")
+                                            //console.log("collision with the outer box right")
                                             if(Math.abs(myGaugeDragCell.y - gaugeMap.itemAt(i).y) <= 10)
                                             {
                                                 myGaugeDragCell.y = gaugeMap.itemAt(i).y
@@ -803,7 +803,7 @@ Item {
                                         {
                                             // snap inter top
                                             myGaugeDragCell.y = gaugeMap.itemAt(i).y - myGaugeDragCell.height
-                                            console.log("collision with the outer box top")
+                                            //console.log("collision with the outer box top")
 
                                             if(Math.abs(myGaugeDragCell.x - gaugeMap.itemAt(i).x) <= 10)
                                             {
@@ -1139,5 +1139,11 @@ Item {
                 }
             }
         }
+    }
+
+    InfoPopup{
+        id: infoPopup
+        x: parent.width/2 -250
+        y: parent.height/2 - 250
     }
 }

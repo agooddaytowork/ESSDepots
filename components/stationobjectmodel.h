@@ -43,7 +43,6 @@ public:
         lastCurrent,
         lastPressure,
         lastVoltage
-
     };
 
     StationObjectModel(QObject *parent =0);

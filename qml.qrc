@@ -28,5 +28,6 @@
         <file>images/menu2.png</file>
         <file>images/addStation.png</file>
         <file>images/removeStation.png</file>
+        <file>qml/InfoPopup.qml</file>
     </qresource>
 </RCC>

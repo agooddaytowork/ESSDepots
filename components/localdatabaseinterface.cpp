@@ -371,6 +371,7 @@ void LocalDatabaseInterface::updateGaugePositions(const int &gid,  const double 
     {
         anIf(LocalDatabaseInterfaceDebuggerEnabled, anError("Querry failed: " << "UPDATE gauges SET top = ?, left_style = ? WHERE id = ?"));
     }
+
 }
 
 

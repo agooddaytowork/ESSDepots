@@ -40,11 +40,26 @@ Item {
             clip: true
 
 
-            delegate: ItemDelegate
+            delegate: SwipeDelegate
             {
                 width: parent.width
                 text: "Station: " + stationName
                 font.pixelSize: 20
+                swipe.right: Label {
+                    id: deleteLabel
+                    text: qsTr("Delete")
+                    color: "white"
+                    verticalAlignment: Label.AlignVCenter
+                    padding: 12
+                    height: parent.height
+                    anchors.right: parent.right
+
+                    SwipeDelegate.onClicked: stationList.model.remove(index)
+
+                    background: Rectangle {
+                        color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                    }
+                }
 
                 highlighted: ListView.isCurrentItem
                 onClicked: {
@@ -65,6 +80,7 @@ Item {
                     thesholdUpPText.myText = thresholdUpP
 
                 }
+
 
             }
 
@@ -361,13 +377,13 @@ Item {
                     onPressed:
                     {
 
-                        console.log("Enter update")
+                        //console.log("Enter update")
 
                         LocalDb.updateStationSettings( stationList.currentIndex,sGlobalId, stationname.myText, egunTypeCombobox.currentText, parseFloat(thesholdDownPText.myText)
                                                       , parseFloat(thesholdUpPText.myText), parseFloat(thesholdDownIText.myText), parseFloat(thesholdUpIText.myText)
                                                       , pumpTypeComboBox.currentIndex, pumpAddressSpinBox.value, pumpChannelSpinBox.value
                                                       , sDCSAddressSpinBox.value, sDCSChannelSpinBox.value)
-                        console.log("out of update")
+                        //console.log("out of update")
                         stationList.model = myStationModel
                     }
                 }

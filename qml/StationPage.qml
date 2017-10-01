@@ -161,10 +161,10 @@ Item {
                 pressureGauge.value =  pressureSerie.at(parseInt(pressureSerie.count/2)).y
                 currentGauge.value  = currentSerie.at(parseInt(currentSerie.count/2)).y
                 voltageGauge.value  = voltageSerie.at(parseInt(voltageSerie.count/2)).y
-                // console.log("Pressure: " + pressureGauge.value)
-                // console.log("Voltage: " + voltageGauge.value)
-                // console.log("Current: " + currentGauge.value)
-                // console.log("------------------------------------------")
+                // //console.log("Pressure: " + pressureGauge.value)
+                // //console.log("Voltage: " + voltageGauge.value)
+                // //console.log("Current: " + currentGauge.value)
+                // //console.log("------------------------------------------")
                 chartView.scrollLeft(pinch.center.x - pinch.previousCenter.x)
                 chartView.scrollUp(pinch.center.y - pinch.previousCenter.y)
 
@@ -208,7 +208,7 @@ Item {
                     LocalDb.updateDataToGraph(pressureSerie, voltageSerie, currentSerie, axisX1.min, axisX1.max, sRFID)
 
                 }
-                // console.log("pinch scale: " + pinch.scale)
+                // //console.log("pinch scale: " + pinch.scale)
             }
 
             onPinchFinished:
@@ -670,6 +670,7 @@ Item {
                     }
 
                 }
+
             }
 
             Button
@@ -679,13 +680,13 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: fruEditEnable
                 Layout.fillWidth:  true
-//                background: Rectangle{
-//                    radius: 10
-//                    implicitWidth: 300
-//                    implicitHeight: 50
-//                    border.color: "#333"
-//                    border.width: 1
-//                }
+                //                background: Rectangle{
+                //                    radius: 10
+                //                    implicitWidth: 300
+                //                    implicitHeight: 50
+                //                    border.color: "#333"
+                //                    border.width: 1
+                //                }
 
                 onClicked: {
 
@@ -726,8 +727,11 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 text: "Ship"
                 Layout.fillWidth: true
-            }
 
+                onClicked: {
+                    infoPopup.open()
+                }
+            }
         }
     }
 
@@ -754,4 +758,12 @@ Item {
             keyboardRect.visible = Qt.inputMethod.visible
         }
     }
+
+    InfoPopup{
+        id: infoPopup
+        x: parent.width/2 -250
+        y: parent.height/2 - 250
+
+    }
+
 }
